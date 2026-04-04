@@ -1466,13 +1466,7 @@ footer {
 }
 .nav-logo:hover::after { opacity: 1; }
 
-/* Section fade-in on scroll */
-.section-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
-}
-.section-reveal.revealed { opacity: 1; transform: translateY(0); }
+/* Section fade-in on scroll — handled by JS adding .section-reveal only after observer fires */
 
 /* Enhanced occasion cards */
 .occasion-card { transition: background 0.3s, transform 0.35s, box-shadow 0.35s; }
@@ -2550,18 +2544,30 @@ hamburger.addEventListener('click', () => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileNav(); });
 
 /* ─── SECTION REVEAL ON SCROLL ─── */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      revealObserver.unobserve(entry.target);
+// Safe approach: only add reveal class to sections NOT already in viewport
+(function() {
+  const style = document.createElement('style');
+  style.textContent = `.section-reveal { opacity:0; transform:translateY(24px); transition:opacity 0.75s ease, transform 0.75s ease; } .section-reveal.revealed { opacity:1; transform:translateY(0); }`;
+  document.head.appendChild(style);
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('section, .distrib-banner').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    // Only animate sections that start below the fold
+    if (rect.top > window.innerHeight * 0.5) {
+      el.classList.add('section-reveal');
+      obs.observe(el);
     }
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('section, .distrib-banner').forEach(el => {
-  el.classList.add('section-reveal');
-  revealObserver.observe(el);
-});
+})();
 
 /* ─── COUNTER ANIMATION ─── */
 function animateCounter(el, target, suffix='') {
@@ -2697,4 +2703,15 @@ document.querySelectorAll('.service-card, .testi-card, .price-card').forEach(car
 /* ─── SMOOTH SCROLL ─── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    e.preventDef
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      const navH = document.getElementById('mainNav').offsetHeight;
+      const top = target.getBoundingClientRect().top + window.scrollY - navH - 10;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+</script>
