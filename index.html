@@ -1328,6 +1328,373 @@ footer {
 .lang-mr .testi-text, .lang-hi .testi-text {
   font-family: 'Tiro Devanagari Hindi', serif;
 }
+
+/* ═══════════════════════════════════════════
+   HAMBURGER & MOBILE NAV
+═══════════════════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 42px; height: 42px;
+  background: rgba(232,101,26,0.1);
+  border: 1px solid rgba(232,101,26,0.25);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.3s;
+  z-index: 110;
+}
+.hamburger:hover { background: rgba(232,101,26,0.2); }
+.hamburger span {
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--gold-light);
+  border-radius: 2px;
+  transition: transform 0.35s, opacity 0.35s, width 0.35s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile Nav Drawer ── */
+.mobile-nav {
+  position: fixed;
+  top: 0; right: 0;
+  width: min(340px, 88vw);
+  height: 100dvh;
+  background: linear-gradient(160deg, #1a0c05 0%, #261508 100%);
+  border-left: 1px solid rgba(201,146,58,0.2);
+  z-index: 300;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.mobile-nav.open { transform: translateX(0); }
+.mobile-nav-inner {
+  padding: 5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1;
+}
+.mobile-nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mobile-nav-logo span { color: var(--saffron); font-style: italic; }
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mobile-nav-links li { border-bottom: 1px solid rgba(201,146,58,0.1); }
+.mobile-nav-links a {
+  display: block;
+  padding: 1rem 0;
+  color: rgba(250,244,232,0.75);
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: color 0.2s, padding-left 0.2s;
+}
+.mobile-nav-links a:hover { color: var(--gold-light); padding-left: 0.5rem; }
+.mobile-nav-cta {
+  display: block;
+  text-align: center;
+  margin-top: auto;
+  text-decoration: none;
+}
+.mobile-lang-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(201,146,58,0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.mobile-lang-row .lang-btn {
+  flex: 1;
+  border-radius: 0;
+  border-bottom: none;
+  border-right: 1px solid rgba(201,146,58,0.2);
+  padding: 0.7rem;
+}
+.mobile-lang-row .lang-btn:last-child { border-right: none; }
+
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 299;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.mobile-nav-overlay.open { opacity: 1; pointer-events: all; }
+
+/* ═══════════════════════════════════════════
+   VISUAL ENHANCEMENTS — ALL SCREEN SIZES
+═══════════════════════════════════════════ */
+
+/* Enhanced nav logo with glow */
+.nav-logo {
+  position: relative;
+}
+.nav-logo::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--saffron), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.nav-logo:hover::after { opacity: 1; }
+
+/* Section fade-in on scroll */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.section-reveal.revealed { opacity: 1; transform: translateY(0); }
+
+/* Enhanced occasion cards */
+.occasion-card { transition: background 0.3s, transform 0.35s, box-shadow 0.35s; }
+.occasion-card:hover { box-shadow: 0 8px 32px rgba(232,101,26,0.12); }
+
+/* Smooth focus rings for accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 3px;
+}
+
+/* Enhanced hero badge animation */
+.hero-badge {
+  animation: badge-float 4s ease-in-out infinite;
+}
+@keyframes badge-float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Floating WhatsApp FAB on mobile */
+.wa-fab {
+  display: none;
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.2rem;
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  z-index: 60;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fab-pulse 2.5s ease-in-out infinite;
+}
+@keyframes fab-pulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4), 0 0 0 0 rgba(37,211,102,0.3); }
+  50% { box-shadow: 0 4px 28px rgba(37,211,102,0.5), 0 0 0 10px rgba(37,211,102,0); }
+}
+.wa-fab:hover { transform: scale(1.08); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — TABLET (max 1024px)
+═══════════════════════════════════════════ */
+@media(max-width:1024px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+  .pamphlet-showcase {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .contact-wrap {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE (max 768px)
+═══════════════════════════════════════════ */
+@media(max-width:768px) {
+  /* Show hamburger, hide desktop nav */
+  .hamburger { display: flex; }
+  .nav-links { display: none !important; }
+  nav { padding: 0.9rem 1.2rem; }
+
+  /* Show WA FAB */
+  .wa-fab { display: flex; }
+
+  /* Hide desktop lang switcher on mobile (use mobile nav version) */
+  .lang-switcher { display: none; }
+
+  /* Hero */
+  .hero {
+    padding: 5rem 1.4rem 3.5rem;
+    min-height: 100dvh;
+    align-items: flex-start;
+    padding-top: 6rem;
+  }
+  .hero-content { max-width: 100%; }
+  .hero h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+  .rangoli-svg { width: 80vw; top: auto; bottom: -10%; right: -15%; transform: none; opacity: 0.08; animation: rangoli-appear 1.5s ease 0.5s forwards; }
+  .hero-reach-badge {
+    padding: 0.7rem 1rem;
+    gap: 0.7rem;
+  }
+  .reach-num { font-size: 1.5rem; }
+  .hero-ctas { flex-direction: column; gap: 0.75rem; }
+  .hero-ctas a { width: 100%; justify-content: center; }
+  .btn-primary, .btn-outline { padding: 0.9rem 1.6rem; font-size: 0.72rem; }
+
+  /* Stats strip */
+  .stats-strip {
+    padding: 2rem 1.4rem;
+    gap: 1.5rem;
+    justify-content: space-between;
+  }
+  .stat:not(:last-child)::after { display: none; }
+  .stat-num { font-size: 2.2rem; }
+  .stat { flex: 1 1 40%; text-align: center; }
+
+  /* Ticker */
+  .ticker-wrap { padding: 0.6rem 0; }
+
+  /* Sections general */
+  section { padding: 4rem 1.4rem; }
+
+  /* Distribution banner */
+  .distrib-banner { padding: 3.5rem 1.4rem; }
+  .distrib-grid { gap: 2.5rem; }
+  .distrib-milestone-row { gap: 1.5rem; justify-content: center; }
+
+  /* How it works */
+  .steps { grid-template-columns: 1fr; gap: 2rem; }
+  .how-intro { margin-bottom: 3rem; }
+  .step-bubble { width: 5.5rem; height: 5.5rem; font-size: 1.6rem; }
+
+  /* Services grid */
+  .services-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .service-card { padding: 1.8rem 1.4rem; }
+
+  /* Why us */
+  .why-grid { gap: 3rem; }
+  .why-features { gap: 1.4rem; }
+  .pamphlet-showcase { padding: 0 0.5rem; }
+  .pamphlet-3d { animation: float-3d 8s ease-in-out infinite; }
+
+  /* Occasions */
+  .occasions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+  }
+  .occasion-card { padding: 1.4rem 1rem; }
+  .occasion-emoji { font-size: 1.6rem; }
+
+  /* Testimonials */
+  .testi-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .testi-card { padding: 1.8rem 1.4rem; }
+
+  /* Pricing */
+  .pricing-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+  .price-card { padding: 2rem 1.4rem; }
+  .price-card.featured { order: -1; }
+
+  /* Contact */
+  .contact-wrap { gap: 2.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .submit-btn { width: 100%; justify-content: center; }
+
+  /* Footer */
+  footer { padding: 2rem 1.4rem; }
+  .footer-top { flex-direction: column; gap: 1.2rem; align-items: flex-start; }
+  .footer-links { gap: 1.2rem; }
+  .footer-bottom { flex-direction: column; gap: 0.4rem; }
+
+  /* Scroll top btn placement */
+  .scroll-top { bottom: 1.2rem; right: 1.2rem; width: 2.6rem; height: 2.6rem; font-size: 0.9rem; }
+
+  /* Zone map */
+  .zone-name { min-width: 70px; font-size: 0.65rem; }
+  .zone-count { min-width: 48px; font-size: 0.62rem; }
+
+  /* Pricing # symbol decoration */
+  #pricing::after { font-size: 12rem; right: 2vw; }
+  #contact::after { font-size: 10rem; right: 2vw; }
+
+  /* Section titles */
+  .section-title { font-size: clamp(1.7rem, 6.5vw, 2.4rem); }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (max 420px)
+═══════════════════════════════════════════ */
+@media(max-width:420px) {
+  .hero { padding: 5.5rem 1.1rem 3rem; }
+  .hero h1 { font-size: clamp(1.9rem, 10vw, 2.8rem); }
+  .hero-sub { font-size: 0.84rem; }
+  .stats-strip { padding: 1.5rem 1.1rem; }
+  .stat-num { font-size: 1.9rem; }
+  section { padding: 3.5rem 1.1rem; }
+  .occasions-grid { grid-template-columns: repeat(2, 1fr); }
+  .distrib-milestone .dm-num { font-size: 2rem; }
+  .steps-line { display: none; }
+  nav { padding: 0.8rem 1rem; }
+  .nav-logo { font-size: 1.15rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   TOUCH & INTERACTION IMPROVEMENTS
+═══════════════════════════════════════════ */
+@media(hover:none) {
+  /* Remove hover-only tilt on touch */
+  .service-card, .testi-card, .price-card {
+    transform: none !important;
+  }
+  /* Larger tap targets */
+  .nav-links a, .footer-links a { padding: 0.4rem 0; }
+  input, select, textarea { font-size: 16px; } /* Prevent iOS zoom */
+  .occasion-card { padding: 1.6rem 1rem; }
+}
+
+/* ── Safe Area (iPhone notch/home bar) ── */
+@supports(padding: max(0px)) {
+  nav { padding-left: max(1.2rem, env(safe-area-inset-left)); padding-right: max(1.2rem, env(safe-area-inset-right)); }
+  footer { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
+  .scroll-top { bottom: max(1.2rem, calc(env(safe-area-inset-bottom) + 0.8rem)); }
+  .wa-fab { bottom: max(5.5rem, calc(env(safe-area-inset-bottom) + 5rem)); right: max(1.2rem, env(safe-area-inset-right)); }
+}
 </style>
 </head>
 <body class="lang-en">
@@ -1345,6 +1712,9 @@ footer {
 <!-- Scroll to top -->
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
+<!-- WhatsApp FAB (mobile only) -->
+<a href="https://wa.me/8007953204" class="wa-fab" target="_blank" aria-label="Chat on WhatsApp">💬</a>
+
 <!-- ── NAV ── -->
 <nav id="mainNav">
   <div class="nav-logo"><span class="om">ॐ</span> Vector.ioST <span style="color:var(--saffron);font-style:italic">Prachar</span></div>
@@ -1356,7 +1726,31 @@ footer {
     <li><a href="#pricing" data-i18n="nav_pricing">Pricing</a></li>
     <li><a href="#contact" class="nav-cta" data-i18n="nav_cta">Partner With Us</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile Nav Drawer -->
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <div class="mobile-nav-logo"><span class="om">ॐ</span> Vector.ioST <span>Prachar</span></div>
+    <ul class="mobile-nav-links">
+      <li><a href="#how" data-i18n="nav_how" onclick="closeMobileNav()">How It Works</a></li>
+      <li><a href="#network" onclick="closeMobileNav()">Network</a></li>
+      <li><a href="#services" data-i18n="nav_services" onclick="closeMobileNav()">Services</a></li>
+      <li><a href="#occasions" data-i18n="nav_occasions" onclick="closeMobileNav()">Occasions</a></li>
+      <li><a href="#pricing" data-i18n="nav_pricing" onclick="closeMobileNav()">Pricing</a></li>
+    </ul>
+    <a href="#contact" class="mobile-nav-cta btn-primary" onclick="closeMobileNav()" data-i18n="nav_cta">Partner With Us</a>
+    <div class="mobile-lang-row">
+      <button class="lang-btn active" onclick="setLang('en');closeMobileNav()" id="mbtn-en">EN</button>
+      <button class="lang-btn" onclick="setLang('hi');closeMobileNav()" id="mbtn-hi">हि</button>
+      <button class="lang-btn" onclick="setLang('mr');closeMobileNav()" id="mbtn-mr">म</button>
+    </div>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
 
 <!-- ── HERO ── -->
 <section class="hero" id="home">
@@ -2111,7 +2505,12 @@ function setLang(lang) {
   currentLang = lang;
   document.body.className = 'lang-' + lang;
   document.documentElement.lang = lang === 'mr' ? 'mr' : lang === 'hi' ? 'hi' : 'en';
-  ['en','hi','mr'].forEach(l => document.getElementById('btn-' + l).classList.toggle('active', l === lang));
+  ['en','hi','mr'].forEach(l => {
+    const b = document.getElementById('btn-' + l);
+    const mb = document.getElementById('mbtn-' + l);
+    if (b) b.classList.toggle('active', l === lang);
+    if (mb) mb.classList.toggle('active', l === lang);
+  });
   const d = T[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const k = el.getAttribute('data-i18n');
@@ -2122,6 +2521,47 @@ function setLang(lang) {
     if (d[k] !== undefined) el.placeholder = d[k];
   });
 }
+
+/* ─── HAMBURGER MENU ─── */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+
+function openMobileNav() {
+  hamburger.classList.add('open');
+  hamburger.setAttribute('aria-expanded', 'true');
+  mobileNav.classList.add('open');
+  mobileNav.setAttribute('aria-hidden', 'false');
+  mobileNavOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileNav() {
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+  mobileNav.classList.remove('open');
+  mobileNav.setAttribute('aria-hidden', 'true');
+  mobileNavOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+hamburger.addEventListener('click', () => {
+  if (mobileNav.classList.contains('open')) closeMobileNav();
+  else openMobileNav();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileNav(); });
+
+/* ─── SECTION REVEAL ON SCROLL ─── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('section, .distrib-banner').forEach(el => {
+  el.classList.add('section-reveal');
+  revealObserver.observe(el);
+});
 
 /* ─── COUNTER ANIMATION ─── */
 function animateCounter(el, target, suffix='') {
